@@ -1,8 +1,10 @@
 (ns aoc-2021.day-01
   (:require [aoc-2021.common :refer [parse-input]]))
 
-(def data (->> (parse-input "day_01")
-               (map #(Integer/parseInt %))))
+(defn parse-data
+  [filename]
+  (->> (parse-input filename)
+       (map #(Integer/parseInt %))))
 
 (defn count-increases
   [data]
@@ -12,14 +14,18 @@
        count))
 
 ;; Part 1
-(count-increases data)
+(defn part-1
+  [filename]
+  (count-increases (parse-data filename)))
 
-(defn count-window-increases
-  [data]
-  (->> data
+(part-1 "day_01")
+
+;; Part 2
+(defn part-2
+  [filename]
+  (->> (parse-data filename)
        (partition 3 1)
        (map #(apply + %))
        count-increases))
 
-;; Part 2
-(count-window-increases data)
+(part-2 "day_01")

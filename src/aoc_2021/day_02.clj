@@ -2,11 +2,9 @@
   (:require [aoc-2021.common :refer [parse-input]]
             [clojure.string :as s]))
 
-(def data (parse-input "day_02"))
-
 (defn parse-instructions
-  [data]
-  (->> data
+  [filename]
+  (->> (parse-input filename)
        (map #(s/split % #" "))
        (map (fn [[direction val]]
               [(keyword direction) (Integer/parseInt val)]))))
@@ -26,7 +24,7 @@
        (reduce handle-instruction-1 [0 0])
        (apply *)))
 
-(part-1 data)
+(part-1 "day_02")
 
 ;; Part 2
 
@@ -38,10 +36,10 @@
     :down [(+ aim val) x y]))
 
 (defn part-2
-  [data]
-  (->> (parse-instructions data)
+  [filename]
+  (->> (parse-instructions filename)
        (reduce handle-instruction-2 [0 0 0])
        rest
        (apply *)))
 
-(part-2 data)
+(part-2 "day_02")
