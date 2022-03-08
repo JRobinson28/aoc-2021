@@ -1,99 +1,80 @@
 (ns aoc-2021.day-04
-  (:require [aoc-2021.common :refer [parse-input]]
+  (:require [aoc-2021.common :refer :all]
             [clojure.string :as s]))
 
-(def winning-combos [[0 1 2 3 4]
-                     [5 6 7 8 9]
-                     [10 11 12 13 14]
-                     [15 16 17 18 19]
-                     [20 21 22 23 24]
-                     [0 5 10 15 20]
-                     [1 6 11 16 21]
-                     [2 7 12 17 22]
-                     [3 8 13 18 23]
-                     [4 9 14 19 24]])
-
-(defn parse-boards
+(defn- parse-nums-and-boards
   [filename]
-  (->> filename
-       parse-input
-       rest
-       (remove s/blank?)
-       (partition 5)
-       (map #(s/join #" " %))
-       (map #(s/split % #" "))
-       (map #(remove s/blank? %))))
+  (let [input (parse-input filename)
+        [nums & boards] (s/split-lines input)]
+    {:nums (->> (s/split nums #",")
+                (map parse-int))
+     :boards (->> boards
+                  (mapcat #(re-seq #"\d+" %))
+                  (map #(identity {:marked? false
+                                   :value (parse-int %)}))
+                  (partition 25))}))
 
-(defn get-numbers
-  [filename]
-  (-> (parse-input filename)
-      first
-      (s/split #",")))
-
-(defn board-won?
+(defn- board-won?
   [board]
-  (->> (for [combo winning-combos]
-         (map #(nth board %) combo))
-       (filter #(every? nil? %))
-       not-empty
-       boolean))
+  (let [rows (partition 5 board)
+        cols (apply map vector rows)]
+    (->> (concat rows cols)
+         (some #(every? :marked? %))
+         some?)))
 
-(defn remove-number
+(defn- mark-val
   [num boards]
   (for [board boards]
-    (reduce (fn [checked val]
-              (if (= num val)
-                (conj checked nil)
-                (conj checked val)))
+    (reduce (fn [checked cell]
+              (conj checked (update cell :marked? #(or % (= num (:value cell))))))
             [] board)))
 
-(defn get-final-val
-  [board-index boards num-index numbers]
-  (let [vals (->> (nth boards board-index)
-                  (cons (nth numbers (- num-index 1)))
-                  (remove nil?)
-                  (map #(Integer/parseInt %)))]
-    (* (first vals) (apply + (rest vals)))))
+(defn- get-final-val
+  [board num]
+  (->> board
+       (remove :marked?)
+       (map :value)
+       (apply +)
+       (* num)))
 
 ;; Part 1
 (defn part-1
   [filename]
-  (loop [num-index 0
-         boards (parse-boards filename)]
-    (let [board-check (map board-won? boards)
-          numbers (get-numbers filename)
-          num (nth numbers num-index)]
-      (if-not (some true? board-check)
-        (recur (inc num-index)
-               (remove-number num boards))
-        (-> (.indexOf board-check true)
-            (get-final-val boards num-index numbers))))))
+  (let [{:keys [nums boards]} (parse-nums-and-boards filename)]
+    (loop [[num & nums] nums
+           boards (mark-val num boards)]
+      (let [board-check (map board-won? boards)]
+        (if-not (some true? board-check)
+          (recur nums
+                 (mark-val (first nums) boards))
+          (let [board (nth boards (.indexOf board-check true))]
+            (get-final-val board num)))))))
 
 (part-1 "day_04")
 
 ;; Part 2
 (defn part-2
   [filename]
-  (loop [num-index 0
-         last-board-index nil
-         boards (parse-boards filename)]
-    (let [board-check (map board-won? boards)
-          numbers (get-numbers filename)
-          num (nth numbers num-index)]
-      (cond
-        (= (count (filter true? board-check))
-           (count (rest board-check)))
-        (recur (inc num-index)
-               (.indexOf board-check false)
-               (remove-number num boards))
+  (let [{:keys [nums boards]} (parse-nums-and-boards filename)]
+    (loop [[num & nums] nums
+           last-board-index nil
+           boards (mark-val num boards)]
+      (let [board-check (map board-won? boards)
+            marked-boards (mark-val (first nums) boards)
+            num-boards-won (count (filter true? board-check))]
+        (cond
+          (= num-boards-won (dec (count boards)))
+          (recur nums
+                 (.indexOf board-check false)
+                 marked-boards)
 
-        (not-every? true? board-check)
-        (recur (inc num-index)
-               last-board-index
-               (remove-number num boards))
+          (not-every? true? board-check)
+          (recur nums
+                 last-board-index
+                 marked-boards)
 
-        :else
-        (get-final-val last-board-index boards num-index numbers)))))
+          :else
+          (let [board (nth boards last-board-index)]
+            (get-final-val board num)))))))
 
-;; Part 2
 (part-2 "day_04")

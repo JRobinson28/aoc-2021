@@ -1,13 +1,14 @@
 (ns aoc-2021.day-02
-  (:require [aoc-2021.common :refer [parse-input]]
+  (:require [aoc-2021.common :refer :all]
             [clojure.string :as s]))
 
 (defn parse-instructions
   [filename]
   (->> (parse-input filename)
+       (s/split-lines)
        (map #(s/split % #" "))
        (map (fn [[direction val]]
-              [(keyword direction) (Integer/parseInt val)]))))
+              [(keyword direction) (parse-int val)]))))
 
 ;; Part 1
 

@@ -1,10 +1,12 @@
 (ns aoc-2021.day-01
-  (:require [aoc-2021.common :refer [parse-input]]))
+  (:require [aoc-2021.common :refer :all]
+            [clojure.string :as s]))
 
 (defn parse-data
   [filename]
   (->> (parse-input filename)
-       (map #(Integer/parseInt %))))
+       (s/split-lines)
+       (map parse-int)))
 
 (defn count-increases
   [data]
