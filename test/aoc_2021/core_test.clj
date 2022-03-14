@@ -5,7 +5,8 @@
             [aoc-2021.day-02 :as day-2]
             [aoc-2021.day-03 :as day-3]
             [aoc-2021.day-04 :as day-4]
-            [aoc-2021.day-05 :as day-5]))
+            [aoc-2021.day-05 :as day-5]
+            [aoc-2021.day-06 :as day-6]))
 
 (deftest day-1
   (testing "day 1 sample part 1"
@@ -36,3 +37,9 @@
     (is (= 5 (day-5/part-1 "day_05_test"))))
   (testing "day 5 sample part 2"
     (is (= 12 (day-5/part-2 "day_05_test")))))
+
+(deftest day-6
+  (testing "day 6 sample part 1"
+    (is (= 5934 (day-6/part-1 "day_06_test"))))
+  (testing "day 5 sample part 2"
+    (is (= 26984457539 (day-6/part-2 "day_06_test")))))
