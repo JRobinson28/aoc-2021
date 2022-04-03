@@ -6,7 +6,7 @@
   [filename]
   (->> (parse-input filename)
        (s/split-lines)
-       (map parse-int)))
+       (map parse-long)))
 
 (defn count-increases
   [data]

@@ -6,9 +6,9 @@
   [filename]
   (-> filename io/resource slurp))
 
-(defn parse-int
+(defn parse-int-radix
   ([s]
-   (parse-int s 10))
+   (parse-int-radix s 10))
   ([s radix]
    (try (Integer/parseInt s radix)
         (catch Exception e nil))))

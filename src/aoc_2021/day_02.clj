@@ -8,7 +8,7 @@
        (s/split-lines)
        (map #(s/split % #" "))
        (map (fn [[direction val]]
-              [(keyword direction) (parse-int val)]))))
+              [(keyword direction) (parse-long val)]))))
 
 ;; Part 1
 

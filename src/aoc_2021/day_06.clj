@@ -5,15 +5,16 @@
   [filename]
   (->> (parse-input filename)
        (re-seq #"\d+")
-       (map parse-int)
+       (map parse-long)
        frequencies))
 
 (defn- update-counts
   [data]
   (let [new-fish (get data 0 0)]
     (-> (reduce #(assoc %1 (dec %2) (get %1 %2 0)) data (range 1 9))
-        (assoc 8 new-fish)
-        (update 6 + new-fish))))
+        (update 6 + new-fish)
+        (assoc 8 new-fish))))
+
 
 (defn- count-fish
   [filename num-days]

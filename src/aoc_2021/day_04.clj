@@ -7,11 +7,11 @@
   (let [input (parse-input filename)
         [nums & boards] (s/split-lines input)]
     {:nums (->> (s/split nums #",")
-                (map parse-int))
+                (map parse-long))
      :boards (->> boards
                   (mapcat #(re-seq #"\d+" %))
                   (map #(identity {:marked? false
-                                   :value (parse-int %)}))
+                                   :value (parse-long %)}))
                   (partition 25))}))
 
 (defn- board-won?

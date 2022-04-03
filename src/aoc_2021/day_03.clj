@@ -30,7 +30,7 @@
         gamma (map #(value-at-index data % max-key \1) length)
         epsilon (map #(value-at-index data % min-key  \0) length)]
     (->> (vector gamma epsilon)
-         (map (comp #(parse-int % 2) s/join))
+         (map (comp #(parse-int-radix % 2) s/join))
          (apply *))))
 
 (part-1 "day_03")
@@ -43,7 +43,7 @@
         oxygen (reduce #(filter-fn %1 %2 max-key \1) data length)
         co2 (reduce #(filter-fn %1 %2 min-key \0) data length)]
     (->> (concat oxygen co2)
-         (map #(parse-int % 2))
+         (map #(parse-int-radix % 2))
          (apply *))))
 
 (part-2 "day_03")

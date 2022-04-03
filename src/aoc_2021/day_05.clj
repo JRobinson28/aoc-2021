@@ -6,7 +6,7 @@
   [filename]
   (->> (parse-input filename)
        (re-seq #"\d+")
-       (map parse-int)
+       (map parse-long)
        (partition 2)
        (partition 2)))
 
