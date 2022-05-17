@@ -1,6 +1,5 @@
 (ns aoc-2021.day-05
-  (:require [aoc-2021.common :refer :all]
-            [clojure.string :as s]))
+  (:require [aoc-2021.common :refer [parse-input]]))
 
 (defn- format-data
   [filename]
