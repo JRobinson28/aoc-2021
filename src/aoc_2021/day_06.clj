@@ -1,5 +1,5 @@
 (ns aoc-2021.day-06
-  (:require [aoc-2021.common :refer :all]))
+  (:require [aoc-2021.common :refer [parse-input]]))
 
 (defn- format-data
   [filename]

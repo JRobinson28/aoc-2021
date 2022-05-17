@@ -1,5 +1,5 @@
 (ns aoc-2021.day-08
-  (:require [aoc-2021.common :refer :all]
+  (:require [aoc-2021.common :refer [parse-input]]
             [clojure.set :as set]
             [clojure.string :as s]))
 
@@ -24,7 +24,7 @@
        count))
 
 (defn- solve-line
-  [{:keys [inputs outputs] :as line}]
+  [{:keys [inputs outputs] :as _line}]
   (let [input-set (map set inputs)
         [one seven four & nums] (sort-by count input-set)
         [has235 has069 [eight]] (partition-all 3 nums)

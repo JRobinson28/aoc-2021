@@ -1,5 +1,5 @@
 (ns aoc-2021.day-02
-  (:require [aoc-2021.common :refer :all]
+  (:require [aoc-2021.common :refer [parse-input]]
             [clojure.string :as s]))
 
 (defn parse-instructions
